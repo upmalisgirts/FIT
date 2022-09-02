@@ -122,23 +122,23 @@ void Fit::DecodeLapMessage(int record_id, vector<uint8_t> message) {
     int len {0};
     int type {0};
     vector<uint8_t> data;
-    for (int i = 0; i < definitions[record_id].size(); i++) {
-        cout << hex << setw(2) << (int)definitions[record_id][i] << " ";
-        if ((i+1)%3 == 0 || i == definitions[record_id].size() - 1) {
-            cout << endl;
-        }
-    }
+    // for (int i = 0; i < definitions[record_id].size(); i++) {
+    //     cout << hex << setw(2) << (int)definitions[record_id][i] << " ";
+    //     if ((i+1)%3 == 0 || i == definitions[record_id].size() - 1) {
+    //         cout << endl;
+    //     }
+    // }
     // cout << endl;
     for (int i = 0; i < definitions[record_id].size(); i = i + 3) {
         id = (int)definitions[record_id][i];
         len = (int)definitions[record_id][i+1];
         type = (int)definitions[record_id][i+2];
         for (int k = 0; k < len; k++) {
-            data.push_back(message[x]);
-            cout << hex << setw(2) << (int)message[x++] << " ";
+            data.push_back(message[x++]);
+            // cout << hex << setw(2) << (int)message[x++] << " ";
             // message_data.push_back(fitbytes[byte_no]);
         }
-        cout << endl;
+        // cout << endl;
         DecodeLapRecord(id,data);
         data.clear();
     }
@@ -146,25 +146,142 @@ void Fit::DecodeLapMessage(int record_id, vector<uint8_t> message) {
 
 void Fit::DecodeLapRecord(int id, vector<uint8_t> data) {
     switch(id) {
-        case 2:
-            cout << dec << ReturnValue(data) << endl;
+        case LAP_EVENT:
+            cout << "Event: " <<
+            dec << ReturnValue(data) << endl;
             break;
-        case 3:
+        case LAP_EVENT_TYPE:
+            cout << "Event type: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_START_TIME:
+            cout << "Start time: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_START_POSITION_LAT:
             cout << "Start position latitude: " <<
             dec << (double)ReturnValue(data)*180/((int64_t)1 << 31) << endl;
             break;
-        case 4:
+        case LAP_START_POSITION_LONG:
             cout << "Start position longitude: " <<
             dec << (double)ReturnValue(data)*180/((int64_t)1 << 31) << endl;
             break;
-        case 5:
+        case LAP_END_POSITION_LAT:
             cout << "End position latitude: " <<
             dec << (double)ReturnValue(data)*180/((int64_t)1 << 31) << endl;
             break;
-        case 6:
-            cout << "End position latitude: " <<
+        case LAP_END_POSITION_LONG:
+            cout << "End position longitude: " <<
             dec << (double)ReturnValue(data)*180/((int64_t)1 << 31) << endl;
-            break;   
+            break;
+        case LAP_TOTAL_ELAPSED_TIME:
+            cout << "Total elapsed time: " <<
+            dec << (double)ReturnValue(data)/1000 << endl;
+            break;
+        case LAP_TOTAL_TIMER_TIME:
+            cout << "Total timer time: " <<
+            dec << (double)ReturnValue(data)/1000 << endl;
+            break;
+        case LAP_TOTAL_DISTANCE:
+            cout << "Total distance: " <<
+            dec << (double)ReturnValue(data)/100 << endl;
+            break;
+        case LAP_TOTAL_CYCLES:
+            cout << "Total cycles: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_TOTAL_CALORIES:
+            cout << "Total calories (kcal): " <<
+            dec << (double)ReturnValue(data) << endl;
+            break;
+        case LAP_TOTAL_FAT_CALORIES:
+            cout << "Total fat calories (kcal): " <<
+            dec << (double)ReturnValue(data) << endl;
+            break;
+        case LAP_AVG_SPEED:
+            cout << "Avarage speed: " <<
+            dec << (double)ReturnValue(data)/1000 << endl;
+            break;
+        case LAP_MAX_SPEED:
+            cout << "Max speed: " <<
+            dec << (double)ReturnValue(data)/1000 << endl;
+            break;
+        case LAP_AVG_HEART_RATE:
+            cout << "Average heart rate: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_MAX_HEART_RATE:
+            cout << "Max heart rate: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_AVG_CADENCE:
+            cout << "Average cadence: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_MAX_CADENCE:
+            cout << "Max cadence: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_AVG_POWER:
+            cout << "Average power: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_MAX_POWER:
+            cout << "Max power: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_TOTAL_ASCENT:
+            cout << "Total ascent: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_TOTAL_DESCENT:
+            cout << "Total descent: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_INTENSITY:
+            cout << "Intensity: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_TRIGGER:
+            cout << "Trigger: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_SPORT:
+            cout << "Sport: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_EVENT_GROUP:
+            cout << "Event group: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_NUM_LENGTHS:
+            cout << "Number of length: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_NORMALIZED_POWER:
+            cout << "Normalized power: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_TOTAL_WORK:
+            cout << "Total work: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_AVG_ALTITUDE:
+            cout << "Average altitude: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_MAX_ALTITUDE:
+            cout << "Max altitude: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_TIMESTAMP:
+            cout << "Timestamp: " <<
+            dec << ReturnValue(data) << endl;
+            break;
+        case LAP_MESSAGE_INDEX:
+            cout << "Message index: " <<
+            dec << ReturnValue(data) << endl;
+            break;
     }
 }
 
